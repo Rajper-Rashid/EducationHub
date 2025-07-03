@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - Education Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #3f51b5;
+      --secondary: #ffffff;
+    }
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #1a237e, #4a148c);
+      color: var(--secondary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      background: var(--primary);
+      color: var(--secondary);
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .header h2 {
+      margin: 0;
+      font-size: 28px;
+    }
+    .header p {
+      margin: 5px 0;
+      font-size: 15px;
+    }
+    .menu-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--secondary);
+      color: var(--primary);
+      border: none;
+      font-size: 26px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 20px;
+      flex-grow: 1;
+    }
+
+    nav button {
+      height: 20vh;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      font-size: 18px;
+      font-weight: 600;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+      transition: 0.3s ease;
+    }
+
+    nav button:hover {
+      background: rgba(255,255,255,0.25);
+      transform: scale(1.03);
+    }
+
+    footer {
+      text-align: center;
+      padding: 14px;
+      font-size: 15px;
+      background: rgba(0,0,0,0.1);
+    }
+    footer a {
+      color: #ffeb3b;
+      text-decoration: none;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.4);
+      z-index: 998;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -100vw;
+      width: 60vw;
+      height: 100vh;
+      background: #fff;
+      box-shadow: -2px 0 8px rgba(0,0,0,0.3);
+      padding: 20px;
+      transition: right 0.3s ease;
+      z-index: 999;
+      border-radius: 0 0 0 10px;
+    }
+
+    .sidebar.open {
+      right: 0;
+    }
+
+    .sidebar h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      margin: 15px 0;
+      font-size: 18px;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .sidebar ul li:hover {
+      text-decoration: underline;
+    }
+
+    @media screen and (max-width: 768px) {
+      nav button {
+        font-size: 16px;
+        height: 18vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2 id="welcome">Welcome, ...</h2>
+    <p id="userPhone">📱 Phone: ...</p>
+    <p id="role">Role: ...</p>
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+  </div>
+
+  <nav>
+    <button onclick="location.href='videos.html'">🎥 Video Lectures</button>
+    <button onclick="location.href='notes.html'">📝 Notes</button>
+    <button onclick="location.href='mcqs.html'">❓ MCQs</button>
+    <button onclick="location.href='quizzes.html'">🧪 Quizzes</button>
+    <button onclick="location.href='admin.html'" id="adminBtn">⚙️ Admin Panel</button>
+  </nav>
+
+  <!-- Sidebar -->
+  <div id="overlay" onclick="closeSidebar()"></div>
+  <div class="sidebar" id="sidebar">
+    <h3>Menu</h3>
+    <ul>
+      <li onclick="location.href='#'">👤 Profile</li>
+      <li onclick="location.href='#'">🎨 Themes</li>
+      <li onclick="location.href='index.html'">🚪 Logout</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>Made with ❤️ by <a href="#">Education Hub</a></p>
+  </footer>
+
+  <script>
+    const currentUser = {
+      name: "Muhammad Rashid",
+      phone: "03001009414"
+    };
+
+    const adminPhones = ["03001009414", "03001009424"];
+    const isAdmin = adminPhones.includes(currentUser.phone);
+
+    document.getElementById("welcome").innerText = "Welcome, " + currentUser.name;
+    document.getElementById("userPhone").innerText = "📱 Phone: " + currentUser.phone;
+    document.getElementById("role").innerText = "Role: " + (isAdmin ? "ADMIN" : "USER");
+
+    if (!isAdmin) {
+      document.getElementById("adminBtn").style.display = "none";
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+      sidebar.classList.toggle("open");
+      overlay.style.display = sidebar.classList.contains("open") ? "block" : "none";
+    }
+
+    function closeSidebar() {
+      document.getElementById("sidebar").classList.remove("open");
+      document.getElementById("overlay").style.display = "none";
+    }
+
+    function logout() {
+      localStorage.removeItem("loginUser");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Auth - Education Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: linear-gradient(to right, #1e3c72, #2a5298);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
+    .auth-container {
+      width: 100%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 30px 20px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(14px);
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+    input::placeholder {
+      color: #ddd;
+    }
+    .password-wrap {
+      position: relative;
+    }
+    .toggle-pass {
+      position: absolute;
+      right: 12px;
+      top: 14px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .match-status {
+      font-size: 13px;
+      text-align: left;
+      padding-left: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #ffeb3b;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .links {
+      margin-top: 16px;
+      font-size: 14px;
+    }
+    .links span {
+      color: #ffc107;
+      cursor: pointer;
+      margin: 0 8px;
+      font-weight: 600;
+    }
+    .links span.hidden {
+      display: none;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <h2 id="formTitle">Welcome Back</h2>
+
+    <!-- Login -->
+    <div id="loginSection">
+      <input type="email" id="loginEmail" placeholder="Email">
+      <div class="password-wrap">
+        <input type="password" id="loginPass" placeholder="Password">
+        <span class="toggle-pass" onclick="togglePass('loginPass', this)">👁️</span>
+      </div>
+      <button onclick="login()">Login</button>
+    </div>
+
+    <!-- Signup -->
+    <div id="signupSection" class="hidden">
+      <input type="email" id="signupEmail" placeholder="Email">
+      <div class="password-wrap">
+        <input type="password" id="signupPass" placeholder="Password" oninput="checkMatch()">
+        <span class="toggle-pass" onclick="togglePass('signupPass', this)">👁️</span>
+      </div>
+      <div class="password-wrap">
+        <input type="password" id="confirmPass" placeholder="Confirm Password" oninput="checkMatch()">
+        <span class="toggle-pass" onclick="togglePass('confirmPass', this)">👁️</span>
+      </div>
+      <div class="match-status" id="matchStatus"></div>
+      <button onclick="signup()">Sign Up</button>
+    </div>
+
+    <!-- Forgot -->
+    <div id="forgotSection" class="hidden">
+      <input type="email" id="forgotEmail" placeholder="Registered Email">
+      <button onclick="forgotPassword()">Reset Password</button>
+    </div>
+
+    <div class="links">
+      <span id="linkLogin" onclick="switchSection('login')">Login</span>
+      <span id="linkSignup" onclick="switchSection('signup')">Sign Up</span>
+      <span id="linkForgot" onclick="switchSection('forgot')">Forgot?</span>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCOTYEy0vfwzVpX0B-mITCOS6A-beO7tto",
+      authDomain: "education-hub-696e7.firebaseapp.com",
+      projectId: "education-hub-696e7",
+      storageBucket: "education-hub-696e7.appspot.com",
+      messagingSenderId: "716199665160",
+      appId: "1:716199665160:web:b2dd6398a516580f6c3bbd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Toggle password visibility
+    window.togglePass = (id, icon) => {
+      const input = document.getElementById(id);
+      if (input.type === "password") {
+        input.type = "text";
+        icon.innerText = "🙈";
+      } else {
+        input.type = "password";
+        icon.innerText = "👁️";
+      }
+    };
+
+    // Section switcher
+    window.switchSection = (section) => {
+      document.getElementById("loginSection").classList.add("hidden");
+      document.getElementById("signupSection").classList.add("hidden");
+      document.getElementById("forgotSection").classList.add("hidden");
+      document.getElementById(section + "Section").classList.remove("hidden");
+
+      document.getElementById("formTitle").innerText =
+        section === "login" ? "Welcome Back" :
+        section === "signup" ? "Create Account" :
+        "Forgot Password";
+
+      document.getElementById("linkLogin").classList.remove("hidden");
+      document.getElementById("linkSignup").classList.remove("hidden");
+      document.getElementById("linkForgot").classList.remove("hidden");
+
+      if (section === "login") document.getElementById("linkLogin").classList.add("hidden");
+      if (section === "signup") document.getElementById("linkSignup").classList.add("hidden");
+      if (section === "forgot") document.getElementById("linkForgot").classList.add("hidden");
+    };
+
+    // Check password match
+    window.checkMatch = () => {
+      const pass = document.getElementById("signupPass").value;
+      const confirm = document.getElementById("confirmPass").value;
+      const status = document.getElementById("matchStatus");
+      if (confirm === "") return status.innerText = "";
+      if (pass === confirm) {
+        status.innerText = "✅ Passwords match";
+        status.style.color = "lightgreen";
+      } else {
+        status.innerText = "❌ Passwords do not match";
+        status.style.color = "#ffcccc";
+      }
+    };
+
+    // Login
+    window.login = () => {
+      const email = document.getElementById("loginEmail").value;
+      const pass = document.getElementById("loginPass").value;
+      if (!email || !pass) return alert("Fill all fields");
+
+      signInWithEmailAndPassword(auth, email, pass)
+        .then(() => window.location.href = "dashboard.html")
+        .catch(e => alert("Login Failed: " + e.message));
+    };
+
+    // Signup
+    window.signup = () => {
+      const email = document.getElementById("signupEmail").value;
+      const pass = document.getElementById("signupPass").value;
+      const confirm = document.getElementById("confirmPass").value;
+
+      if (!email || !pass || !confirm) return alert("All fields required");
+      if (pass !== confirm) return alert("Passwords do not match");
+
+      createUserWithEmailAndPassword(auth, email, pass)
+        .then(() => {
+          alert("Signup successful. Please log in.");
+          switchSection("login");
+        })
+        .catch(e => alert("Signup failed: " + e.message));
+    };
+
+    // Forgot
+    window.forgotPassword = () => {
+      const email = document.getElementById("forgotEmail").value;
+      if (!email) return alert("Enter registered email");
+      sendPasswordResetEmail(auth, email)
+        .then(() => alert("Reset email sent!"))
+        .catch(e => alert("Error: " + e.message));
+    };
+
+    switchSection("login");
+  </script>
+</body>
+</html>

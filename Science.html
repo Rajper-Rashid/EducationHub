@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Science Lectures – Education Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #0288d1, #26c6da);
+      font-family: 'Inter', sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      text-align: center;
+      padding: 30px 20px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    header p {
+      font-size: 16px;
+      color: #eee;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      padding: 40px 20px;
+    }
+    .card {
+      background: rgba(255,255,255,0.08);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+      backdrop-filter: blur(12px);
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: scale(1.02);
+    }
+    .card iframe {
+      width: 100%;
+      height: 200px;
+      border-radius: 10px;
+      border: none;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #ccc;
+      background: rgba(0,0,0,0.2);
+    }
+    .back-btn {
+      margin: 20px;
+      background: #ffc107;
+      color: #000;
+      font-weight: bold;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-block;
+      align-self: flex-start;
+    }
+    .back-btn:hover {
+      background: #ffb300;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🔬 Science Video Lectures</h1>
+    <p>Biology, Physics & Chemistry – All in One</p>
+  </header>
+
+  <a href="videos.html" class="back-btn">⬅ Back to Subjects</a>
+
+  <div class="container">
+    <div class="card">
+      <iframe src="https://www.youtube.com/embed/bZDYSlpK6Aw" allowfullscreen></iframe>
+    </div>
+    <div class="card">
+      <iframe src="https://www.youtube.com/embed/ZkSziHtVdmI" allowfullscreen></iframe>
+    </div>
+    <div class="card">
+      <iframe src="https://www.youtube.com/embed/fIgP9tuZj6k" allowfullscreen></iframe>
+    </div>
+    <div class="card">
+      <iframe src="https://www.youtube.com/embed/oN3pX_eywO4" allowfullscreen></iframe>
+    </div>
+    <div class="card">
+      <iframe src="https://www.youtube.com/embed/EKw7cHZvVfw" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Education Hub — All rights reserved.
+  </footer>
+
+</body>
+</html>
